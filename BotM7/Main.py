@@ -8,6 +8,7 @@ from Data import Data
 
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
+DUNGEON_MASTER_ID = "359883763985022977"
 
 nest_asyncio.apply()
 client = discord.Client()
@@ -42,7 +43,7 @@ async def on_message(message):
     # ------------------- BOT -------------------
 
     if channel.name == "m7":
-        if author_id == "359883763985022977":
+        if author_id == DUNGEON_MASTER_ID:
             pass
 
         if content == "?help" or content == "?h":
