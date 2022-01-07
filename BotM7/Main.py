@@ -1,0 +1,145 @@
+from BotM7.Bots.WorkerBot import WorkerBot
+import os
+import discord
+import nest_asyncio
+
+from Bots.EasterEggBot import EasterEggBot
+from Data import Data
+
+
+DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
+
+nest_asyncio.apply()
+client = discord.Client()
+
+
+# ------------------- Main Program -------------------
+
+
+@client.event
+async def on_ready():
+    print("Bot Iniciacado")
+    print("Nome do bot: " + client.user.name)
+    print("ID do bot: " + str(client.user.id))
+
+
+@client.event
+async def on_message(message):
+    content = message.content.lower()
+    channel = message.channel
+    author = message.author.name
+    author_id = message.author.id
+    mention = message.author.mention
+
+    ee_bot = EasterEggBot(message)
+    bot = WorkerBot(message)
+
+    if author == client.user.name:
+        return
+
+    # ------------------- Easter Eggs -------------------
+
+    await ee_bot.talk()
+
+    # ------------------- BOT -------------------
+
+    # if bot.check_channel("m7"):
+    #    await bot.commands()
+
+    if channel.name == "m7":
+        if content == "?help" or content == "?h":
+            await message.channel.send(
+                "**COMANDOS DO BOT**\n"
+                + "**?rules :** Regras do campeonato\n"
+                + "**?p :** Pontos atuais\n"
+                + "**?r :** Ranking atual de jogadores\n"
+                + "**?m6 :** Cadastrar emblema de Maestria 6\n"
+                + "**?m7 :** Cadastrar emblema de Maestria 7\n"
+                + "**?c :** Se cadastrar no campeonato"
+            )
+        if content == "?rules":
+            Data.add_new_participant(author_id, author)
+
+            await message.channel.send(rules)
+
+        if content == "?c":
+            Data.add_new_participant(author_id, author)
+
+            await message.channel.send(
+                mention + "cadastrado no sistema," + "aguarde sua aprovação"
+            )
+
+        if content == "?r":
+            ranking = Data.get_general_ranking()
+            print(ranking)
+            result = ""
+            for row in ranking:
+                result += row[0] + " - " + str(row[1]) + " pontos\n"
+
+            await message.channel.send(result)
+
+        if content == "?p":
+            points = Data.get_points_by_id(author_id)
+            result = "{0} - {1} pontos\n".format(mention, points)
+
+            await message.channel.send(result)
+
+        if content == "?m6":
+            if Data.has_recent_image(author_id):
+
+                points = Data.get_points_by_id(author_id)
+                points += 0.5
+                Data.update_points(author_id, points)
+
+                await message.channel.send(
+                    mention
+                    + " parabéns pelo Emblema M6! - Pontos totais: "
+                    + str(points)
+                )
+            else:
+                await message.channel.send(
+                    "Por favor, envie a foto do emblema antes de realizar o cadastro"
+                )
+
+        if content == "?m7":
+            if Data.has_recent_image(author_id):
+                points = Data.get_points_by_id(author_id)
+                points += 1
+
+                Data.update_points(author_id, points)
+
+                await message.channel.send(
+                    mention
+                    + " parabéns pelo Emblema M7! - Pontos totais: "
+                    + str(points)
+                )
+            else:
+                await message.channel.send(
+                    "Por favor, envie a foto do emblema antes de realizar o cadastro"
+                )
+
+        if len(message.attachments) > 0:
+            pic_ext = [".jpg", ".png", ".jpeg"]
+            try:
+                url = message.attachments[0].url
+                filename = message.attachments[0].filename
+                for ext in pic_ext:
+                    if filename.endswith(ext):
+                        Data.add_new_image(author_id, url, filename)
+                        await message.channel.send("Imagem cadastrada com sucesso!")
+
+            except:
+                print(
+                    "Imagem encontrada porém erro ao obter atributos tag=message_attachments"
+                )
+
+        if author_id == "359883763985022977":
+            if content == "?resetseasonsegredin":
+                Data.transfer_query()
+
+            if content == "?segredin":
+                await message.channel.send("risos")
+
+
+
+client.run(DISCORD_TOKEN)

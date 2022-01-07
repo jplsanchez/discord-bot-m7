@@ -1,0 +1,5 @@
+discord
+nest-asyncio
+mysqlclient
+mysql-connector-python
+

@@ -1,0 +1,1 @@
+worker: python BotM7/Main.py
