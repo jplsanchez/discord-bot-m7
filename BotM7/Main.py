@@ -25,8 +25,6 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    content = message.content.lower()
-    channel = message.channel
     author = message.author.name
     author_id = message.author.id
     mention = message.author.mention
@@ -42,22 +40,22 @@ async def on_message(message):
 
     # ------------------- BOT -------------------
 
-    if channel.name == "m7":
+    if bot.check_channel("m7"):
         if author_id == DUNGEON_MASTER_ID:
             pass
 
-        if content == "?help" or content == "?h":
+        if bot.check_content("?help", "?h"):
             await bot.say(MessageEnum.COMMANDS_LIST.value)
 
-        if content == "?rules":
+        if bot.check_content("?rules"):
             Data.add_new_participant(author_id, author)
             await bot.say(MessageEnum.RULES.value)
 
-        if content == "?c":
+        if bot.check_content("?c"):
             Data.add_new_participant(author_id, author)
             await bot.say(mention + MessageEnum.REGISTERED_SUCCESSFULLY.value)
 
-        if content == "?r":
+        if bot.check_content("?r"):
             ranking = Data.get_general_ranking()
             print(ranking)
             result = ""
@@ -66,7 +64,7 @@ async def on_message(message):
 
             await bot.say(result)
 
-        if content == "?rg":
+        if bot.check_content("?rg"):
             ranking = Data.get_general_overall_ranking()
             print(ranking)
             result = MessageEnum.EVERY_SEASON_RANKING.value
@@ -75,13 +73,13 @@ async def on_message(message):
 
             await bot.say(result)
 
-        if content == "?p":
+        if bot.check_content("?p"):
             points = Data.get_points_by_id(author_id)
             result = "{0} - {1} pontos\n".format(mention, points)
 
             await bot.say(result)
 
-        if content == "?m6":
+        if bot.check_content("?m6"):
             if Data.has_recent_image(author_id):
                 points = Data.get_points_by_id(author_id)
                 points += 0.5
@@ -91,7 +89,7 @@ async def on_message(message):
             else:
                 await bot.say(MessageEnum.PLEASE_SEND_PICTURE.value)
 
-        if content == "?m7":
+        if bot.check_content("?m7"):
             if Data.has_recent_image(author_id):
                 points = Data.get_points_by_id(author_id)
                 points += 1
