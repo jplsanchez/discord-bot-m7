@@ -23,10 +23,9 @@ class Data:
             sql = con.cursor()
             sql.execute(query)
             result = sql.fetchall()
-            print("Resultado Obtido...")
             con.commit()
             con.close()
-            print("Conexão finalizada.")
+            print("Conexão finalizada")
 
             return result
 
@@ -95,11 +94,3 @@ class Data:
         if result == []:
             return False
         return True
-
-    def transfer_all_data_to_legacy():
-        transfer_query = (
-            "INSERT INTO LegacyRanking "
-            + "SELECT * FROM Ranking; "
-            + "DELETE FROM Ranking; "
-        )
-        Data.execute_query(transfer_query)

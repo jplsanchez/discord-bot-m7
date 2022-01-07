@@ -1,10 +1,9 @@
-from BotM7.Bots.WorkerBot import WorkerBot
 import os
 import discord
 import nest_asyncio
 
-from Bots.EasterEggBot import EasterEggBot
 from Data import Data
+from datetime import datetime, timedelta
 
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
@@ -12,6 +11,13 @@ DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 nest_asyncio.apply()
 client = discord.Client()
 
+rules = (
+    "**Regras:**\n"
+    + "- Cada emblema de Maestria 7 novo vale um ponto\n"
+    + "- Cada emblema de Maestria 6 novo vale 0,5 ponto\n"
+    + "- Pra entrar no campeonato tem que postar a foto atual dos emblemas atuais e das maestrias 7\n"
+    + "- Só são contabilizados emblemas obtidos depois da adesão ao campeonato\n"
+)
 
 # ------------------- Main Program -------------------
 
@@ -31,20 +37,30 @@ async def on_message(message):
     author_id = message.author.id
     mention = message.author.mention
 
-    ee_bot = EasterEggBot(message)
-    bot = WorkerBot(message)
-
     if author == client.user.name:
         return
 
     # ------------------- Easter Eggs -------------------
 
-    await ee_bot.talk()
+    if content.startswith("???") and channel.name == "m7":
+        await message.channel.send("Oia o bot aqui rapai, fica esperto " + mention)
+
+    if content == "!!!":
+        await message.add_reaction("😑")
+
+    if content.startswith("!play vessel") or content.startswith(">play vessel"):
+        await message.add_reaction("😑")
+        await message.channel.send("Carai, " + mention + " você só ouve isso!")
+
+    if (
+        content.startswith("!play melhores")
+        or content.startswith("!play as melhores")
+        or content.startswith(">play as melhores")
+    ):
+        await message.add_reaction("😁")
+        await message.channel.send("Taporra, " + mention + " lançou a braba!")
 
     # ------------------- BOT -------------------
-
-    # if bot.check_channel("m7"):
-    #    await bot.commands()
 
     if channel.name == "m7":
         if content == "?help" or content == "?h":
@@ -132,14 +148,6 @@ async def on_message(message):
                 print(
                     "Imagem encontrada porém erro ao obter atributos tag=message_attachments"
                 )
-
-        if author_id == "359883763985022977":
-            if content == "?resetseasonsegredin":
-                Data.transfer_query()
-
-            if content == "?segredin":
-                await message.channel.send("risos")
-
 
 
 client.run(DISCORD_TOKEN)
