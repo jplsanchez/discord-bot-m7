@@ -61,7 +61,7 @@ async def on_message(message):
                 + "**?r :** Ranking atual de jogadores\n"
                 + "**?m6 :** Cadastrar emblema de Maestria 6\n"
                 + "**?m7 :** Cadastrar emblema de Maestria 7\n"
-                + "**?c :** Se cadastrar no campeonato"
+                + "**?c :** Se cadastrar no campeonato\n"
                 + "**?rg :** Ranking Geral de todas temporadas"
             )
         if content == "?rules":
@@ -80,6 +80,15 @@ async def on_message(message):
             ranking = Data.get_general_ranking()
             print(ranking)
             result = ""
+            for row in ranking:
+                result += row[0] + " - " + str(row[1]) + " pontos\n"
+
+            await message.channel.send(result)
+
+        if content == "?rg":
+            ranking = Data.get_general_overall_ranking()
+            print(ranking)
+            result = "**Ranking de todas temporadas:**\n"
             for row in ranking:
                 result += row[0] + " - " + str(row[1]) + " pontos\n"
 
