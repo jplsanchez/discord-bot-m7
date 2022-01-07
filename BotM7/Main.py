@@ -1,6 +1,7 @@
 import os
 import discord
 import nest_asyncio
+from MessageEnum import MessageEnum
 
 from Bot import Bot
 from Data import Data
@@ -10,14 +11,6 @@ DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 
 nest_asyncio.apply()
 client = discord.Client()
-
-rules = (
-    "**Regras:**\n"
-    + "- Cada emblema de Maestria 7 novo vale um ponto\n"
-    + "- Cada emblema de Maestria 6 novo vale 0,5 ponto\n"
-    + "- Pra entrar no campeonato tem que postar a foto atual dos emblemas atuais e das maestrias 7\n"
-    + "- Só são contabilizados emblemas obtidos depois da adesão ao campeonato\n"
-)
 
 # ------------------- Main Program -------------------
 
@@ -44,7 +37,6 @@ async def on_message(message):
 
     # ------------------- Easter Eggs -------------------
 
-    # if bot.check_channel("m7"):  # RETiRAR  DOS EASTER EGGS - TESTES
     await bot.easter_egg_talk()
 
     # ------------------- BOT -------------------
@@ -54,27 +46,15 @@ async def on_message(message):
             pass
 
         if content == "?help" or content == "?h":
-            await message.channel.send(
-                "**COMANDOS DO BOT**\n"
-                + "**?rules :** Regras do campeonato\n"
-                + "**?p :** Pontos atuais\n"
-                + "**?r :** Ranking atual de jogadores\n"
-                + "**?m6 :** Cadastrar emblema de Maestria 6\n"
-                + "**?m7 :** Cadastrar emblema de Maestria 7\n"
-                + "**?c :** Se cadastrar no campeonato\n"
-                + "**?rg :** Ranking Geral de todas temporadas"
-            )
+            await bot.say(MessageEnum.COMMANDS_LIST)
+
         if content == "?rules":
             Data.add_new_participant(author_id, author)
-
-            await message.channel.send(rules)
+            await bot.say(MessageEnum.RULES)
 
         if content == "?c":
             Data.add_new_participant(author_id, author)
-
-            await message.channel.send(
-                mention + "cadastrado no sistema," + "aguarde sua aprovação"
-            )
+            await bot.say(mention + MessageEnum.REGISTERED_SUCCESSFULLY)
 
         if content == "?r":
             ranking = Data.get_general_ranking()
@@ -83,56 +63,42 @@ async def on_message(message):
             for row in ranking:
                 result += row[0] + " - " + str(row[1]) + " pontos\n"
 
-            await message.channel.send(result)
+            await bot.say(result)
 
         if content == "?rg":
             ranking = Data.get_general_overall_ranking()
             print(ranking)
-            result = "**Ranking de todas temporadas:**\n"
+            result = MessageEnum.EVERY_SEASON_RANKING
             for row in ranking:
                 result += row[0] + " - " + str(row[1]) + " pontos\n"
 
-            await message.channel.send(result)
+            await bot.say(result)
 
         if content == "?p":
             points = Data.get_points_by_id(author_id)
             result = "{0} - {1} pontos\n".format(mention, points)
 
-            await message.channel.send(result)
+            await bot.say(result)
 
         if content == "?m6":
             if Data.has_recent_image(author_id):
-
                 points = Data.get_points_by_id(author_id)
                 points += 0.5
                 Data.update_points(author_id, points)
 
-                await message.channel.send(
-                    mention
-                    + " parabéns pelo Emblema M6! - Pontos totais: "
-                    + str(points)
-                )
+                await bot.say(mention + MessageEnum.M6_EMBLEM + str(points))
             else:
-                await message.channel.send(
-                    "Por favor, envie a foto do emblema antes de realizar o cadastro"
-                )
+                await bot.say(MessageEnum.PLEASE_SEND_PICTURE)
 
         if content == "?m7":
             if Data.has_recent_image(author_id):
                 points = Data.get_points_by_id(author_id)
                 points += 1
-
                 Data.update_points(author_id, points)
 
-                await message.channel.send(
-                    mention
-                    + " parabéns pelo Emblema M7! - Pontos totais: "
-                    + str(points)
-                )
+                await bot.say(mention + MessageEnum.M7_EMBLEM + str(points))
             else:
-                await message.channel.send(
-                    "Por favor, envie a foto do emblema antes de realizar o cadastro"
-                )
+                await bot.say(MessageEnum.PLEASE_SEND_PICTURE)
 
         if len(message.attachments) > 0:
             pic_ext = [".jpg", ".png", ".jpeg"]
@@ -142,11 +108,11 @@ async def on_message(message):
                 for ext in pic_ext:
                     if filename.endswith(ext):
                         Data.add_new_image(author_id, url, filename)
-                        await message.channel.send("Imagem cadastrada com sucesso!")
+                        await bot.say(MessageEnum.IMAGE_REGISTERED)
 
             except:
                 print(
-                    "Imagem encontrada porém erro ao obter atributos tag=message_attachments"
+                    "ERROR: Imagem encontrada porém erro ao obter atributos tag=message_attachments"
                 )
 
 
