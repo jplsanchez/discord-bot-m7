@@ -7,9 +7,10 @@ class Bot:
         self.author_id = message.author.id
         self.mention = message.author.mention
 
-    def check_content(self, request):
-        if self.content == request.lower():
-            return True
+    def check_content(self, *requests):
+        for request in requests:
+            if self.content == request.lower():
+                return True
         return False
 
     def check_content_start(self, request):
