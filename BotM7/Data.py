@@ -23,9 +23,10 @@ class Data:
             sql = con.cursor()
             sql.execute(query)
             result = sql.fetchall()
+            print("Resultado Obtido...")
             con.commit()
             con.close()
-            print("Conexão finalizada")
+            print("Conexão finalizada.")
 
             return result
 

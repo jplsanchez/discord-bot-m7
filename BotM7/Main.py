@@ -2,8 +2,8 @@ import os
 import discord
 import nest_asyncio
 
+from Bot import Bot
 from Data import Data
-from datetime import datetime, timedelta
 
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
@@ -37,28 +37,15 @@ async def on_message(message):
     author_id = message.author.id
     mention = message.author.mention
 
+    bot = Bot(message)
+
     if author == client.user.name:
         return
 
     # ------------------- Easter Eggs -------------------
 
-    if content.startswith("???") and channel.name == "m7":
-        await message.channel.send("Oia o bot aqui rapai, fica esperto " + mention)
-
-    if content == "!!!":
-        await message.add_reaction("😑")
-
-    if content.startswith("!play vessel") or content.startswith(">play vessel"):
-        await message.add_reaction("😑")
-        await message.channel.send("Carai, " + mention + " você só ouve isso!")
-
-    if (
-        content.startswith("!play melhores")
-        or content.startswith("!play as melhores")
-        or content.startswith(">play as melhores")
-    ):
-        await message.add_reaction("😁")
-        await message.channel.send("Taporra, " + mention + " lançou a braba!")
+    # if bot.check_channel("m7"):  # RETiRAR  DOS EASTER EGGS - TESTES
+    await bot.easter_egg_talk()
 
     # ------------------- BOT -------------------
 
