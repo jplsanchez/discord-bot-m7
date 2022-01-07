@@ -50,6 +50,9 @@ async def on_message(message):
     # ------------------- BOT -------------------
 
     if channel.name == "m7":
+        if author_id == "359883763985022977":
+            pass
+
         if content == "?help" or content == "?h":
             await message.channel.send(
                 "**COMANDOS DO BOT**\n"
@@ -59,6 +62,7 @@ async def on_message(message):
                 + "**?m6 :** Cadastrar emblema de Maestria 6\n"
                 + "**?m7 :** Cadastrar emblema de Maestria 7\n"
                 + "**?c :** Se cadastrar no campeonato"
+                + "**?rg :** Ranking Geral de todas temporadas"
             )
         if content == "?rules":
             Data.add_new_participant(author_id, author)

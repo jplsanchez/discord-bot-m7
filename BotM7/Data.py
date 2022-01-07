@@ -49,6 +49,17 @@ class Data:
 
         return Data.execute_query(get_ranking_query)
 
+    def get_general_overall_ranking():
+        get_overall_ranking_query = (
+            "SELECT r.PersonName, (r.Points + lr.Points) as Pts "
+            + "    FROM Ranking AS r "
+            + "LEFT JOIN LegacyRanking AS lr"
+            + "    ON r.ID = lr.ID"
+            + "ORDER BY Pts DESC;"
+        )
+
+        return Data.execute_query(get_overall_ranking_query)
+
     def get_points_by_id(id):
         get_player_ranking_query = (
             "SELECT Points " + "FROM Ranking WHERE ID = " + str(id)
