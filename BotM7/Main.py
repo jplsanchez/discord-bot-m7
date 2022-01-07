@@ -46,15 +46,15 @@ async def on_message(message):
             pass
 
         if content == "?help" or content == "?h":
-            await bot.say(MessageEnum.COMMANDS_LIST)
+            await bot.say(MessageEnum.COMMANDS_LIST.value)
 
         if content == "?rules":
             Data.add_new_participant(author_id, author)
-            await bot.say(MessageEnum.RULES)
+            await bot.say(MessageEnum.RULES.value)
 
         if content == "?c":
             Data.add_new_participant(author_id, author)
-            await bot.say(mention + MessageEnum.REGISTERED_SUCCESSFULLY)
+            await bot.say(mention + MessageEnum.REGISTERED_SUCCESSFULLY.value)
 
         if content == "?r":
             ranking = Data.get_general_ranking()
@@ -68,7 +68,7 @@ async def on_message(message):
         if content == "?rg":
             ranking = Data.get_general_overall_ranking()
             print(ranking)
-            result = MessageEnum.EVERY_SEASON_RANKING
+            result = MessageEnum.EVERY_SEASON_RANKING.value
             for row in ranking:
                 result += row[0] + " - " + str(row[1]) + " pontos\n"
 
@@ -86,9 +86,9 @@ async def on_message(message):
                 points += 0.5
                 Data.update_points(author_id, points)
 
-                await bot.say(mention + MessageEnum.M6_EMBLEM + str(points))
+                await bot.say(mention + MessageEnum.M6_EMBLEM.value + str(points))
             else:
-                await bot.say(MessageEnum.PLEASE_SEND_PICTURE)
+                await bot.say(MessageEnum.PLEASE_SEND_PICTURE.value)
 
         if content == "?m7":
             if Data.has_recent_image(author_id):
@@ -96,9 +96,9 @@ async def on_message(message):
                 points += 1
                 Data.update_points(author_id, points)
 
-                await bot.say(mention + MessageEnum.M7_EMBLEM + str(points))
+                await bot.say(mention + MessageEnum.M7_EMBLEM.value + str(points))
             else:
-                await bot.say(MessageEnum.PLEASE_SEND_PICTURE)
+                await bot.say(MessageEnum.PLEASE_SEND_PICTURE.value)
 
         if len(message.attachments) > 0:
             pic_ext = [".jpg", ".png", ".jpeg"]
@@ -108,7 +108,7 @@ async def on_message(message):
                 for ext in pic_ext:
                     if filename.endswith(ext):
                         Data.add_new_image(author_id, url, filename)
-                        await bot.say(MessageEnum.IMAGE_REGISTERED)
+                        await bot.say(MessageEnum.IMAGE_REGISTERED.value)
 
             except:
                 print(
