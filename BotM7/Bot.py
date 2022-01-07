@@ -10,6 +10,8 @@ class Bot:
     def check_content(self, *requests):
         for request in requests:
             if self.content == request.lower():
+                print("Comando encontrado: ")
+                print(request)
                 return True
         return False
 
