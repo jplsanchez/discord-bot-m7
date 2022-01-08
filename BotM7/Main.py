@@ -1,36 +1,47 @@
 import os
 import discord
 import nest_asyncio
+from dataclasses import dataclass
 
 from Bot import Bot
 from Conversation.Conversation import Conversation
 
 
-DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
-
-nest_asyncio.apply()
-client = discord.Client()
-
-# ------------------- Main Program -------------------
+@dataclass
+class Configuration:
+    DISCORD_TOKEN: str
+    client: discord.Client
 
 
-@client.event
-async def on_ready():
-    print("INFO:\nBot Inicializado")
-    print("Nome do bot: " + client.user.name)
-    print("ID do bot: " + str(client.user.id))
+def setup() -> Configuration:
+    nest_asyncio.apply()
+    discord_token = os.environ.get("DISCORD_TOKEN")
+    discord_client = discord.Client()
+
+    return Configuration(discord_token, discord_client)
 
 
-@client.event
-async def on_message(message):
-    bot = Bot(message)
+def main(config: Configuration):
+    client = config.client
 
-    if bot.author == client.user.name:
-        return
+    @config.client.event
+    async def on_ready():
+        print("INFO:\nBot Inicializado")
+        print("Nome do bot: " + config.client.user.name)
 
-    # ------------------- BOT -------------------
-    talk = Conversation(bot)
-    await talk.run()
+    @config.client.event
+    async def on_message(message):
+        bot = Bot(message)
+
+        if bot.author == config.client.user.name:
+            return
+
+        talk = Conversation(bot)
+        await talk.run()
+
+    config.client.run(config.DISCORD_TOKEN)
 
 
-client.run(DISCORD_TOKEN)
+if __name__ == "__main__":
+    config = setup()
+    main(config)
