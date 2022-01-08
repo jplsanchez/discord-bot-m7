@@ -1,6 +1,7 @@
 from Bot import Bot
 from Data import Data
 from Enums.MessageEnum import MessageEnum
+from Enums import UtilsEnum, EasterEggsEnum
 
 
 class Conversation:
@@ -84,11 +85,11 @@ class Conversation:
                     await self.bot.say(MessageEnum.PLEASE_SEND_PICTURE.value)
 
             if len(self.bot.message.attachments) > 0:
-                pic_ext = [".jpg", ".png", ".jpeg"]
                 try:
                     url = self.bot.message.attachments[0].url
                     filename = self.bot.message.attachments[0].filename
-                    for ext in pic_ext:
+
+                    for ext in UtilsEnum.image_format_list():
                         if filename.endswith(ext):
                             Data.add_new_image(self.bot.author_id, url, filename)
                             await self.bot.say(MessageEnum.IMAGE_REGISTERED.value)
@@ -105,21 +106,12 @@ class Conversation:
         if self.bot.check_content("!!!"):
             await self.bot.react("😑")
 
-        vessel = ["!play vessel", "-play vessel", ">play vessel"]
-        for variant in vessel:
+        for variant in EasterEggsEnum.VesselList():
             if self.bot.check_content_start(variant):
                 await self.bot.react("😑")
                 await self.bot.say("Carai Barba, você só ouve isso!")
 
-        best_of = [
-            "!play melhores",
-            "-play melhores",
-            ">play melhores",
-            "!play as melhores",
-            "-play as melhores",
-            ">play as melhores",
-        ]
-        for variant in best_of:
+        for variant in EasterEggsEnum.BestOfList():
             if self.bot.check_content_start(variant):
                 await self.bot.react("😁")
                 await self.bot.say("Taporra, " + self.mention + " lançou a braba!")
