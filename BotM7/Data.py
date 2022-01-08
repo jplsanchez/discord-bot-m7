@@ -17,7 +17,7 @@ class Data:
                 database="heroku_4ef95ca69d09856",
             )
 
-            print("\nConexão iniciada\nQuery:")
+            print("\nINFO: Conexão iniciada\nQuery:")
             print(query)
 
             sql = con.cursor()
@@ -31,7 +31,7 @@ class Data:
             return result
 
         except:
-            print("Connection error tag=execute_query")
+            print("ERROR: Erro de conexão tag=execute_query")
 
     def add_new_participant(author_id, author):
         add_person_query = (

@@ -29,29 +29,3 @@ class Bot:
         if self.channel.name == channel.lower():
             return True
         return False
-
-    async def easter_egg_talk(self):
-        if self.check_content("???"):
-            await self.say("Oia o bot aqui rapai, fica esperto " + self.mention)
-
-        if self.check_content("!!!"):
-            await self.react("😑")
-
-        vessel = ["!play vessel", "-play vessel", ">play vessel"]
-        for variant in vessel:
-            if self.check_content_start(variant):
-                await self.react("😑")
-                await self.say("Carai Barba, você só ouve isso!")
-
-        best_of = [
-            "!play melhores",
-            "-play melhores",
-            ">play melhores",
-            "!play as melhores",
-            "-play as melhores",
-            ">play as melhores",
-        ]
-        for variant in best_of:
-            if self.check_content_start(variant):
-                await self.react("😁")
-                await self.say("Taporra, " + self.mention + " lançou a braba!")
