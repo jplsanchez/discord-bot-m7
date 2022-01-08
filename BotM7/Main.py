@@ -41,6 +41,7 @@ async def on_message(message):
     # ------------------- BOT -------------------
 
     if bot.check_channel("m7"):
+        print("at channel m7")
         if author_id == DUNGEON_MASTER_ID:
             pass
 
