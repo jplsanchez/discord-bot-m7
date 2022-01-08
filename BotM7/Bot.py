@@ -10,8 +10,7 @@ class Bot:
     def check_content(self, *requests):
         for request in requests:
             if self.content == request.lower():
-                print("Comando encontrado: ")
-                print(request)
+                print("INFO: Comando encontrado: " + request)
                 return True
         return False
 
@@ -27,7 +26,7 @@ class Bot:
         await self.message.add_reaction(reaction)
 
     def check_channel(self, channel):
-        if self.content == channel.lower():
+        if self.channel.name == channel.lower():
             return True
         return False
 
