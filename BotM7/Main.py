@@ -4,7 +4,7 @@ import nest_asyncio
 from dataclasses import dataclass
 
 from Bot import Bot
-from Conversation.Conversation import Conversation
+from Conversation import Conversation
 
 
 @dataclass
