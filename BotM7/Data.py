@@ -4,15 +4,12 @@ from mysql.connector import connection
 
 
 class Data:
-
-    DB_USER = os.environ.get("DB_USER")
-    DB_PASSWORD = os.environ.get("DB_PASSWORD")
-
+    @staticmethod
     def __execute_query(query):
         try:
             con = connection.MySQLConnection(
-                user=Data.DB_USER,
-                password=Data.DB_PASSWORD,
+                user=os.environ.get("DB_USER"),
+                password=os.environ.get("DB_PASSWORD"),
                 host="us-cdbr-east-04.cleardb.com",
                 database="heroku_4ef95ca69d09856",
             )
@@ -33,7 +30,8 @@ class Data:
         except:
             print("ERROR: Erro de conexão tag=__execute_query")
 
-    def add_new_participant(self, author_id, author):
+    @staticmethod
+    def add_new_participant(author_id, author):
         add_person_query = (
             "INSERT INTO Ranking "
             + "(ID, Points, PersonName, IsActive) "
@@ -42,7 +40,8 @@ class Data:
 
         Data.__execute_query(add_person_query)
 
-    def get_general_ranking(self):
+    @staticmethod
+    def get_general_ranking():
         get_ranking_query = (
             "SELECT PersonName, Points FROM Ranking ORDER BY Points DESC"
         )
@@ -60,19 +59,22 @@ class Data:
 
         return Data.__execute_query(get_overall_ranking_query)
 
-    def get_points_by_id(self, id):
+    @staticmethod
+    def get_points_by_id(id):
         get_player_ranking_query = f"SELECT Points FROM Ranking WHERE ID = {str(id)}"
 
         return Data.__execute_query(get_player_ranking_query)[0][0]
 
-    def update_points(self, id, points):
+    @staticmethod
+    def update_points(id, points):
         update_points_query = (
             f'UPDATE Ranking SET Points = {str(points)} WHERE ID = "{str(id)}"'
         )
 
         Data.__execute_query(update_points_query)
 
-    def add_new_image(self, author_id, url, filename):
+    @staticmethod
+    def add_new_image(author_id, url, filename):
         now_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         add_image_query = (
@@ -82,7 +84,8 @@ class Data:
 
         Data.__execute_query(add_image_query)
 
-    def has_recent_image(self, author_id):
+    @staticmethod
+    def has_recent_image(author_id):
         twenty_minutes = timedelta(minutes=20)
         now = datetime.now()
         recent_time = now - twenty_minutes
@@ -97,7 +100,8 @@ class Data:
             return False
         return True
 
-    def set_points(self, id: str, points: float):
+    @staticmethod
+    def set_points(id: str, points: float):
         set_points_query = (
             f'UPDATE ranking SET points = {str(points)} where ID = "{id}"'
         )
