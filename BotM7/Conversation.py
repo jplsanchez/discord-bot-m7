@@ -45,11 +45,11 @@ class Conversation:
         if self.bot.check_content_start("?setpoints"):
             try:
                 mention = self.bot.get_last_but_one_word_from_message()
-                id = self.bot.get_id_from_mention(mention)
+                mention_id = self.bot.get_id_from_mention(mention)
                 points = float(self.bot.get_last_word_from_message())
-                Data.set_points(id, points)
+                Data.set_points(mention_id, points)
                 await self.bot.say(MessageEnum.SET_POINTS_MESSAGE.value)
-            except:
+            except BaseException:
                 await self.bot.say(MessageEnum.ERROR_SET_POINTS.value)
 
     async def __get_image(self):
@@ -63,7 +63,7 @@ class Conversation:
                         Data.add_new_image(self.bot.author_id, url, filename)
                         await self.bot.say(MessageEnum.IMAGE_REGISTERED.value)
 
-            except:
+            except BaseException:
                 print(
                     "ERROR: Imagem encontrada porém erro ao obter atributos tag=message_attachments"
                 )
