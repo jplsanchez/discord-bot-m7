@@ -34,3 +34,7 @@ class MessageEnum(Enum):
     )
 
     IMAGE_REGISTERED = "Imagem cadastrada com sucesso!"
+
+    SET_POINTS_MESSAGE = "Pontos alterados com sucesso!"
+
+    ERROR_SET_POINTS = "Erro na leitura dos parâmetros."

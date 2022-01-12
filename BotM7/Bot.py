@@ -29,3 +29,12 @@ class Bot:
         if self.channel.name == channel.lower():
             return True
         return False
+
+    def get_last_word_from_message(self):
+        return self.message.content.split()[-1]
+
+    def get_last_but_one_word_from_message(self):
+        return self.message.content.split()[-2]
+
+    def get_id_from_mention(self, mention):
+        return mention[3:-1]

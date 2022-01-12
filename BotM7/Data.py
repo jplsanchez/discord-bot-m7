@@ -37,7 +37,7 @@ class Data:
         add_person_query = (
             "INSERT INTO Ranking "
             + "(ID, Points, PersonName, IsActive) "
-            + f'VALUES (" {str(author_id)} ",0, " {author} ", 0)'
+            + f'VALUES ("{str(author_id)}", 0, "{author}", 0)'
         )
 
         Data.execute_query(add_person_query)
@@ -96,3 +96,9 @@ class Data:
         if result == []:
             return False
         return True
+
+    def set_points(id: str, points: float):
+        set_points_query = (
+            f'UPDATE ranking SET points = {str(points)} where ID = "{id}"'
+        )
+        return Data.execute_query(set_points_query)
