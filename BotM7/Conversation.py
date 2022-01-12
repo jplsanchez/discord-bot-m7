@@ -41,7 +41,7 @@ class Conversation:
                 print(ranking)
                 result = ""
                 for row in ranking:
-                    result += row[0] + " - " + str(row[1]) + " pontos\n"
+                    result += f"{row[0]} - {str(row[1])} pontos\n"
 
                 await self.bot.say(result)
 
@@ -50,13 +50,13 @@ class Conversation:
                 print(ranking)
                 result = MessageEnum.EVERY_SEASON_RANKING.value
                 for row in ranking:
-                    result += row[0] + " - " + str(row[1]) + " pontos\n"
+                    result += f"{row[0]} - {str(row[1])} pontos\n"
 
                 await self.bot.say(result)
 
             if self.bot.check_content("?p"):
                 points = Data.get_points_by_id(self.bot.author_id)
-                result = "{0} - {1} pontos\n".format(self.bot.mention, points)
+                result = f"{self.bot.mention} - {points} pontos\n"
 
                 await self.bot.say(result)
 
@@ -101,7 +101,7 @@ class Conversation:
 
     async def __eater_eggs_messages(self):
         if self.bot.check_content("???"):
-            await self.bot.say("Oia o bot aqui rapai, fica esperto " + self.mention)
+            await self.bot.say(f"Oia o bot aqui rapai, fica esperto {self.mention}")
 
         if self.bot.check_content("!!!"):
             await self.bot.react("😑")
@@ -114,4 +114,4 @@ class Conversation:
         for variant in EasterEggsEnum.BestOfList():
             if self.bot.check_content_start(variant):
                 await self.bot.react("😁")
-                await self.bot.say("Taporra, " + self.mention + " lançou a braba!")
+                await self.bot.say(f"Taporra, {self.mention} lançou a braba!")

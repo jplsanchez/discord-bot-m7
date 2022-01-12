@@ -36,8 +36,8 @@ class Data:
     def add_new_participant(author_id, author):
         add_person_query = (
             "INSERT INTO Ranking "
-            "(ID, Points, PersonName, IsActive) "
-            'VALUES ("' + str(author_id) + '",0, "' + author + '", 0)'
+            + "(ID, Points, PersonName, IsActive) "
+            + f'VALUES (" {str(author_id)} ",0, " {author} ", 0)'
         )
 
         Data.execute_query(add_person_query)
@@ -61,19 +61,13 @@ class Data:
         return Data.execute_query(get_overall_ranking_query)
 
     def get_points_by_id(id):
-        get_player_ranking_query = (
-            "SELECT Points " + "FROM Ranking WHERE ID = " + str(id)
-        )
+        get_player_ranking_query = f"SELECT Points FROM Ranking WHERE ID = {str(id)}"
 
         return Data.execute_query(get_player_ranking_query)[0][0]
 
     def update_points(id, points):
         update_points_query = (
-            "UPDATE Ranking SET Points = "
-            + str(points)
-            + ' WHERE ID = "'
-            + str(id)
-            + '"'
+            f'UPDATE Ranking SET Points = {str(points)} WHERE ID = "{str(id)}"'
         )
 
         Data.execute_query(update_points_query)
@@ -82,11 +76,8 @@ class Data:
         now_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         add_image_query = (
-            "INSERT INTO ImageRef "
-            + "(PersonID, DateAdded, URL, IsActive,FileName) "
-            + 'VALUES ("{}", "{}", "{}", {}, "{}")'.format(
-                author_id, now_string, url, 1, filename
-            )
+            "INSERT INTO ImageRef (PersonID, DateAdded, URL, IsActive,FileName) "
+            + f'VALUES ("{author_id}", "{now_string}", "{url}", {1}, "{filename}")'
         )
 
         Data.execute_query(add_image_query)
@@ -99,8 +90,7 @@ class Data:
 
         get_recent_images_query = (
             "SELECT PersonID FROM ImageRef "
-            + 'WHERE PersonID = "{}" '.format(author_id)
-            + 'AND DateAdded > "{}" '.format(recent_time_string)
+            + f'WHERE PersonID = "{author_id}" AND DateAdded > "{recent_time_string}" '
         )
         result = Data.execute_query(get_recent_images_query)
         if result == []:

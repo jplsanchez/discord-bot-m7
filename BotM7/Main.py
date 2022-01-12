@@ -27,7 +27,7 @@ def main(config: Configuration):
     @config.client.event
     async def on_ready():
         print("INFO:\nBot Inicializado")
-        print("Nome do bot: " + config.client.user.name)
+        print(f"Nome do bot: {config.client.user.name}")
 
     @config.client.event
     async def on_message(message):
