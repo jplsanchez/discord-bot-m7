@@ -1,7 +1,7 @@
 from Bot import Bot
 from Data import Data
 from Enums.MessageEnum import MessageEnum
-from Enums import UtilsEnum, EasterEggsEnum
+from Enums import UtilsLists, EasterEggsLists
 
 
 class Conversation:
@@ -58,7 +58,7 @@ class Conversation:
                 url = self.bot.message.attachments[0].url
                 filename = self.bot.message.attachments[0].filename
 
-                for ext in UtilsEnum.image_format_list():
+                for ext in UtilsLists.image_format_list():
                     if filename.endswith(ext):
                         Data.add_new_image(self.bot.author_id, url, filename)
                         await self.bot.say(MessageEnum.IMAGE_REGISTERED.value)
@@ -144,12 +144,12 @@ class Conversation:
         if self.bot.check_content("!!!"):
             await self.bot.react("😑")
 
-        for variant in EasterEggsEnum.VesselList():
+        for variant in EasterEggsLists.VesselList():
             if self.bot.check_content_start(variant):
                 await self.bot.react("😑")
                 await self.bot.say("Carai Barba, você só ouve isso!")
 
-        for variant in EasterEggsEnum.BestOfList():
+        for variant in EasterEggsLists.BestOfList():
             if self.bot.check_content_start(variant):
                 await self.bot.react("😁")
                 await self.bot.say(f"Taporra, {self.mention} lançou a braba!")
